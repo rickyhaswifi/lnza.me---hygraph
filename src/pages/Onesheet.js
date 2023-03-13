@@ -54,8 +54,10 @@ function Onesheet() {
   
   const { onesheets } = data;
   
-
   const onesheet = onesheets.find((onesheet) => onesheet.oneSheetSlug === oneSheetSlug);
+
+  if (!onesheet) return window.location.href = '/'
+
   const {artistName, labelName, coverArt, facebookLikes, spotifyFollowers, instagramLikes, youtubeViews, twitterLikes, dropboxLink, videoId, biography, audioFile, releaseName, bookingPhone, bookingEmail} = onesheet
 	return(
     <>

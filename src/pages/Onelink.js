@@ -55,6 +55,9 @@ function Onelink() {
   const { onelinks } = data;
   
   const onelink = onelinks.find((onelink) => onelink.oneLinkSlug === oneLinkSlug);
+
+  if (!onelink) return window.location.href = '/'
+  
   const {
     artistTitle, 
     releaseName,
