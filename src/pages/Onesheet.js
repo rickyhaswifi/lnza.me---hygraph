@@ -11,8 +11,6 @@ import {BioTitle, Bio, BioExpandToggle, BookingCard} from '../styled-components/
 import ReactMarkdown from 'react-markdown';
 import Wavesurfer from '../components/Wavesurfer';
 
-
-
 // Writing query
 const GET_SHEETS = gql`
 	query GET_ONE_SHEETS {
@@ -53,6 +51,8 @@ function Onesheet() {
 	if (loading) return "Loading...";
   
   const { onesheets } = data;
+
+  if(!onesheets) return <div />;
   
   const onesheet = onesheets.find((onesheet) => onesheet.oneSheetSlug === oneSheetSlug);
 
@@ -62,7 +62,9 @@ function Onesheet() {
 	return(
     <>
     <PageTitle>One Sheet</PageTitle>
-    <PageSubTitle>{labelName}</PageSubTitle>
+    {!!labelName && (
+      <PageSubTitle>{labelName}</PageSubTitle>
+    )}
     <BookingCard>
       {!!bookingPhone && (
         <p><i class="fas fa-phone-square-alt fa-fw"></i> {bookingPhone}</p>
@@ -74,57 +76,78 @@ function Onesheet() {
     <GridWrapper>
       <OSCard>
         <CardContent>
-        <h2>{artistName}</h2>
-        <h3>{releaseName}</h3>
+          {!!artistName && (
+           <h2>{artistName}</h2>
+          )}
+          {!!releaseName && (
+            <h3>{releaseName}</h3>
+          )}
         </CardContent>
 
         <img src={coverArt.url} alt={artistName} />
+        {!!facebookLikes && (
         <SocialSection className="gr-facebook">
         <i className="fab fa-facebook-f fa-fw"></i>
             <span>{facebookLikes} Likes</span>
         </SocialSection>
+        )}
+        {!!spotifyFollowers && (
         <SocialSection className="gr-spotify">
         <i className="fab fa-spotify fa-fw"></i>
             <span>{spotifyFollowers} Fans</span>
         </SocialSection>
+        )}
+        {!!instagramLikes && (
         <SocialSection className="gr-instagram">
         <i className="fab fa-instagram fa-fw"></i>
             <span>{instagramLikes} Fans</span>
         </SocialSection>
-        <SocialSection className="gr-youtube">
-        <i className="fab fa-youtube fa-fw"></i>
-            <span>{youtubeViews}</span>
-        </SocialSection>
-        <SocialSection className="gr-twitter">
-        <i className="fab fa-twitter fa-fw"></i>
-            <span>{twitterLikes} Fans</span>
-        </SocialSection>
-        <SocialSection className="gr-download">
-        <Link to={dropboxLink}>
-        <i class="fas fa-cloud-download-alt fa-fw"></i>
-          <span>Download</span>
-          </Link>
-        </SocialSection>
+        )}
+        {!!youtubeViews && (
+          <SocialSection className="gr-youtube">
+          <i className="fab fa-youtube fa-fw"></i>
+              <span>{youtubeViews}</span>
+          </SocialSection>
+        )}
+        {!!twitterLikes && (
+          <SocialSection className="gr-twitter">
+          <i className="fab fa-twitter fa-fw"></i>
+              <span>{twitterLikes} Fans</span>
+          </SocialSection>
+        )}
+        {!!dropboxLink && (
+          <SocialSection className="gr-download">
+          <Link to={dropboxLink}>
+          <i class="fas fa-cloud-download-alt fa-fw"></i>
+            <span>Download</span>
+            </Link>
+          </SocialSection>
+        )}
 
       </OSCard>
       
       <ColumnWrapper>
-      <VideoIframe videoID={videoId}/>
-      <BioTitle>{artistName} Biography</BioTitle>
-
-      <Bio className={expandText === true ? "textExpand" : ""}>
-        <ReactMarkdown source={biography} />
-      </Bio>
+      {!!videoId && (
+        <VideoIframe videoID={videoId}/>
+      )}
+      {!!artistName && (
+        <BioTitle>{artistName} Biography</BioTitle>
+      )}
+      {!!biography && (
+        <Bio className={expandText === true ? "textExpand" : ""}>
+          <ReactMarkdown source={biography} />
+        </Bio>
+      )}
 
       <BioExpandToggle onClick={ () => setExpandText(!expandText) }>
         {expandText === true ? <><i class="fas fa-minus fa-fw"></i> Read Less</> : <><i className="fas fa-plus fa-fw"></i> Read More</>}
       </BioExpandToggle>
 
-
       {/* <hr />
       {releaseName} */}
-
-      <Wavesurfer url={audioFile.url} />
+      {!!audioFile && (
+        <Wavesurfer url={audioFile.url} />
+      )}
       </ColumnWrapper>
     </GridWrapper>
     </>
